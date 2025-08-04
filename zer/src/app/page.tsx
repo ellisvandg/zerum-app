@@ -1,6 +1,27 @@
+"use client";
+import React, { useEffect } from "react";
+import {motion, useMotionTemplate, useMotionValue, animate } from "framer-motion";
+import { Stars } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+
+const COLORS = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
+
+
 export default function Home() {
+  const color = useMotionValue(COLORS[0]);
+  const backgroundImage = useMotionTemplate`radial-gradient(125% 125% at 50% 0%, #020617 50%, ${color})`;
+
+  useEffect(() => {
+    animate(color, COLORS, {
+      ease: "easeInOut",
+      duration: 10,
+      repeat: Infinity,
+      repeatType: "mirror"
+    })
+  }, [])
+  
   return (
-    <div className="min-h-screen bg-slate-900 font-mono">
+    <div className="min-h-screen font-sans">
       <header className="w-full flex justify-between items-center 
       px-8 py-6 absolute top-0 left-0 z-10">
         <div className="text-2xl font-bold">
@@ -13,16 +34,23 @@ export default function Home() {
         </nav>
       </header>
 
-      <main className="flex items-center justify-center min-h-screen text-center px-4">
+      <motion.section 
+       style={{backgroundImage,}}
+       id="herosection" className="flex items-center justify-center min-h-screen text-center px-4">
         <div>
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">Your Space, your way.</h1>
-          <p className="text-lg sm:text-xl max-w-2xl mx-auto">
+          <p className="text-sm sm:text-sm max-w-lg leading-relaxed mx-auto">
             Build your perfect dashboard with full customisable widgets, play YouTube playlists, manage to-do lists,
             plan with a calendar, pin moodboard images, jot down notes, and more. Everything you need, just the way
             you want it. 
           </p>
         </div>
-      </main>
+        <div className="absolute inset-0 z-1">
+          <Canvas>
+            <Stars radius={50} count={800} factor={4} fade speed={1}/>
+          </Canvas>
+        </div>
+      </motion.section>
     </div>
   );
 }
